@@ -26,7 +26,7 @@ class LoginViewController: UIViewController {
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         textField.attributedPlaceholder = placeholder
         textField.textColor = .white
-        return templateInputContainer(image: image, textField: textField)
+        return Utilites().inputContainerView(image: image, textField: textField)
     }()
     
     private lazy var passwordContainerView: UIView = {
@@ -38,7 +38,7 @@ class LoginViewController: UIViewController {
         textField.attributedPlaceholder = placeholder
         textField.isSecureTextEntry = true
         textField.textColor = .white
-        return templateInputContainer(image: image, textField: textField)
+        return Utilites().inputContainerView(image: image, textField: textField)
     }()
     
     private let loginButton: UIButton = {
@@ -54,14 +54,7 @@ class LoginViewController: UIViewController {
     }()
     
     private let registerButton: UIButton = {
-        let button = UIButton()
-        
-        let title = NSMutableAttributedString(string: "Don't have an account? ",
-                                              attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
-        title.append(NSAttributedString(string: "Sign Up",
-                                        attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.white]))
-
-        button.setAttributedTitle(title, for: .normal)
+        let button = Utilites().attributedButton("Don't have an account?", "Sign Up")
         button.addTarget(self, action: #selector(didTapRegisterButton), for: .touchUpInside)
         return button
     }()
@@ -87,7 +80,9 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func didTapRegisterButton() {
-        print("Register")
+        let vc = RegistrationViewController()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
     }
     
     // MARK: - Helpers
@@ -96,10 +91,8 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .twitterBlue
         
         view.addSubview(logoImage)
-        logoImage.anchor(top: view.safeAreaLayoutGuide.topAnchor,
-                         width: 170,
-                         height: 170)
-        logoImage.centerX(inView: view)
+        logoImage.centerX(inView: view, topAnchor: view.safeAreaLayoutGuide.topAnchor)
+        logoImage.setDimensions(width: 170, height: 170)
         
         let stack = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView, stubView, loginButton])
         stack.axis = .vertical
@@ -119,35 +112,5 @@ class LoginViewController: UIViewController {
                               height: 10)
         registerButton.centerX(inView: view)
     }
-    
-    private func templateInputContainer(image: UIImage?, textField: UITextField) -> UIView {
-        let view = UIView()
-        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        let imageView = UIImageView(image: image)
-        view.addSubview(imageView)
-        imageView.anchor(left: view.safeAreaLayoutGuide.leftAnchor,
-                     bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                     paddingBottom: 8)
-        imageView.setDimensions(width: 24, height: 24)
-        
-        view.addSubview(textField)
-        textField.anchor(left: imageView.safeAreaLayoutGuide.rightAnchor,
-                     bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                     right: view.safeAreaLayoutGuide.rightAnchor,
-                     paddingLeft: 5,
-                     paddingBottom: 8,
-                     paddingRight: 0)
-        
-        let dividerView = UIView()
-        dividerView.backgroundColor = .white
-        view.addSubview(dividerView)
-        dividerView.anchor(left: view.safeAreaLayoutGuide.leftAnchor,
-                           bottom: view.safeAreaLayoutGuide.bottomAnchor,
-                           right: view.safeAreaLayoutGuide.rightAnchor,
-                           height: 0.5)
-        
-        return view
-    }
-    
+
 }
