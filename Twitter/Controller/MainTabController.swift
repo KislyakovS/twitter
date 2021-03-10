@@ -11,15 +11,32 @@ class MainTabController: UITabBarController {
 
     // MARK: - Properties
     
+    private let actionButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        button.backgroundColor = .twitterBlue
+        button.setImage(UIImage(named: "new_tweet"), for: .normal)
+        button.addTarget(self, action: #selector(didTapActionButton), for: .touchUpInside)
+        return button
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureViewController()
+        configureUI()
+    }
+    
+    // MARK: - Did
+    
+    @objc private func didTapActionButton() {
+        print("Tap action button")
     }
     
     // MARK: - Helpers
+    
     private func configureViewController() {
         let feed = templateNavigationViewController(image: UIImage(named: "home_unselected"),
                                                     rootViewController: FeedController())
@@ -42,5 +59,16 @@ class MainTabController: UITabBarController {
         viewController.navigationBar.barTintColor = .white
         
         return viewController
+    }
+    
+    private func configureUI() {
+        view.addSubview(actionButton)
+        actionButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor,
+                            right: view.safeAreaLayoutGuide.rightAnchor,
+                            paddingBottom: 64,
+                            paddingRight: 14,
+                            width: 56,
+                            height: 56)
+        actionButton.layer.cornerRadius = 56/2
     }
 }
