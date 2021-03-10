@@ -11,6 +11,8 @@ class RegistrationViewController: UIViewController {
 
     // MARK: - Properties
     
+    private let imagePicker = UIImagePickerController()
+    
     private let photoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(named: "plus_photo"), for: .normal)
@@ -94,6 +96,10 @@ class RegistrationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        
         configureUI()
     }
     
@@ -108,7 +114,7 @@ class RegistrationViewController: UIViewController {
     }
     
     @objc private func didTapPhotoButton() {
-        print("photo")
+        present(imagePicker, animated: true, completion: nil)
     }
     
     // MARK: - Helpers
@@ -141,4 +147,21 @@ class RegistrationViewController: UIViewController {
 
     }
 
+}
+
+extension RegistrationViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let photo = info[.editedImage] as? UIImage else { return }
+        
+        photoButton.imageView?.contentMode = .scaleAspectFill
+        photoButton.layer.borderWidth = 2
+        photoButton.layer.borderColor = UIColor.white.cgColor
+        photoButton.setImage(photo.withRenderingMode(.alwaysOriginal), for: .normal)
+            
+        picker.dismiss(animated: true, completion: nil)
+    }
+        
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
 }
