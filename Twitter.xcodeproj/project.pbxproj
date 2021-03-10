@@ -19,6 +19,9 @@
 		203B54F025F8B89800DA2552 /* NotificationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B54EF25F8B89800DA2552 /* NotificationsController.swift */; };
 		203B54F325F8B8B100DA2552 /* ConversationsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203B54F225F8B8B100DA2552 /* ConversationsController.swift */; };
 		20AE0D7E25F8C9C4000A8773 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AE0D7D25F8C9C3000A8773 /* Extensions.swift */; };
+		20EDEF2B25F94F9D00B4FE40 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EDEF2925F94F9D00B4FE40 /* LoginViewController.swift */; };
+		20EDEF2C25F94F9D00B4FE40 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EDEF2A25F94F9D00B4FE40 /* RegistrationViewController.swift */; };
+		20EDEF2F25F94FAC00B4FE40 /* Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EDEF2E25F94FAC00B4FE40 /* Utilites.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +39,9 @@
 		203B54EF25F8B89800DA2552 /* NotificationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsController.swift; sourceTree = "<group>"; };
 		203B54F225F8B8B100DA2552 /* ConversationsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsController.swift; sourceTree = "<group>"; };
 		20AE0D7D25F8C9C3000A8773 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		20EDEF2925F94F9D00B4FE40 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		20EDEF2A25F94F9D00B4FE40 /* RegistrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		20EDEF2E25F94FAC00B4FE40 /* Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilites.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,7 @@
 		203B54DF25F8B37900DA2552 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				20EDEF2E25F94FAC00B4FE40 /* Utilites.swift */,
 				20AE0D7D25F8C9C3000A8773 /* Extensions.swift */,
 			);
 			path = Utils;
@@ -103,6 +110,7 @@
 		203B54E125F8B39100DA2552 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				20EDEF2825F94F9D00B4FE40 /* Authentication */,
 				203B54E625F8B5AD00DA2552 /* MainTabController.swift */,
 				203B54E925F8B87600DA2552 /* FeedController.swift */,
 				203B54EC25F8B88500DA2552 /* ExploreController.swift */,
@@ -131,6 +139,15 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		20EDEF2825F94F9D00B4FE40 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				20EDEF2925F94F9D00B4FE40 /* LoginViewController.swift */,
+				20EDEF2A25F94F9D00B4FE40 /* RegistrationViewController.swift */,
+			);
+			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,11 +223,14 @@
 				203B54CF25F8B33900DA2552 /* ViewController.swift in Sources */,
 				20AE0D7E25F8C9C4000A8773 /* Extensions.swift in Sources */,
 				203B54CB25F8B33900DA2552 /* AppDelegate.swift in Sources */,
+				20EDEF2C25F94F9D00B4FE40 /* RegistrationViewController.swift in Sources */,
+				20EDEF2F25F94FAC00B4FE40 /* Utilites.swift in Sources */,
 				203B54F325F8B8B100DA2552 /* ConversationsController.swift in Sources */,
 				203B54EA25F8B87600DA2552 /* FeedController.swift in Sources */,
 				203B54F025F8B89800DA2552 /* NotificationsController.swift in Sources */,
 				203B54E725F8B5AD00DA2552 /* MainTabController.swift in Sources */,
 				203B54CD25F8B33900DA2552 /* SceneDelegate.swift in Sources */,
+				20EDEF2B25F94F9D00B4FE40 /* LoginViewController.swift in Sources */,
 				203B54ED25F8B88500DA2552 /* ExploreController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
