@@ -63,7 +63,10 @@ class MainTabController: UITabBarController {
     // MARK: - Did
     
     @objc private func didTapActionButton() {
-        print("Tap action button")
+        //print("Tap action button")
+        let uploadTweet = UINavigationController(rootViewController: UploadTweetController())
+        uploadTweet.modalPresentationStyle = .fullScreen
+        present(uploadTweet, animated: true, completion: nil)
     }
     
     // MARK: - Helpers
