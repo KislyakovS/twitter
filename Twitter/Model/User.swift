@@ -6,3 +6,22 @@
 //
 
 import Foundation
+
+struct User {
+    let fullname: String
+    let username: String
+    let email: String
+    var profileImageUrl: URL?
+    let uid: String
+    
+    init(uid: String, dictinary: [String: AnyObject]) {
+        self.uid = uid
+        
+        self.fullname = dictinary["fullname"] as? String ?? ""
+        self.username = dictinary["username"] as? String ?? ""
+        self.email = dictinary["email"] as? String ?? ""
+        if let profileImageUrlString = dictinary["profileImageUrl"] as? String {
+            self.profileImageUrl = URL(string: profileImageUrlString)
+        }
+    }
+}
