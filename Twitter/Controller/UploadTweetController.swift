@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import SDWebImage
 
 class UploadTweetController: UIViewController {
     
     // MARK: - Properties
+    
+    private let user: User?
     
     private lazy var buttonTweet: UIButton = {
         let button = UIButton(type: .system)
@@ -26,8 +29,28 @@ class UploadTweetController: UIViewController {
                 
         return button
     }()
+    
+    private let profileImage: UIImageView = {
+       let image = UIImageView()
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        image.setDimensions(width: 48, height: 48)
+        image.layer.cornerRadius = 48/2
+        return image
+    }()
+    
+    private let captionTextView = CaptionTextView()
 
     // MARK: - Lifecycle
+    
+    init(user: User?) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +67,11 @@ class UploadTweetController: UIViewController {
     }
     
     @objc private func didTapUploadTweet() {
-        print("DEBUG: Upload new tweet")
+        guard let caption = captionTextView.text else { return }
+        TweetService.shared.uploadTweet(caprion: caption) { (error, ref) in
+            print("DEBUG: Upload new tweet")
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     // MARK: - Helpers
@@ -52,6 +79,21 @@ class UploadTweetController: UIViewController {
     private func configureUI() {
         view.backgroundColor = .white
         
+        configureNavigationBar()
+        
+        let stack = UIStackView(arrangedSubviews: [profileImage, captionTextView])
+        stack.axis = .horizontal
+        stack.spacing = 12
+        
+        view.addSubview(stack)
+        stack.anchor(top: view.safeAreaLayoutGuide.topAnchor,
+                     left: view.safeAreaLayoutGuide.leftAnchor,
+                     right: view.safeAreaLayoutGuide.rightAnchor,
+                     paddingTop: 16, paddingLeft: 16, paddingRight: 16)
+        profileImage.sd_setImage(with: user?.profileImageUrl, completed: nil)
+    }
+    
+    private func configureNavigationBar() {
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.isTranslucent = false
         
