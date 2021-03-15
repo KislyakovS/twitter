@@ -20,25 +20,33 @@ class LoginViewController: UIViewController {
     
     private lazy var emailContainerView: UIView = {
         let image = UIImage(named: "ic_mail_outline_white_2x-1")
-        
+
+        return Utilites().inputContainerView(image: image, textField: emailTextField)
+    }()
+    
+    private let emailTextField: UITextField = {
         let textField = UITextField()
         let placeholder = NSAttributedString(string: "Email",
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         textField.attributedPlaceholder = placeholder
         textField.textColor = .white
-        return Utilites().inputContainerView(image: image, textField: textField)
+        return textField
     }()
     
     private lazy var passwordContainerView: UIView = {
         let image = UIImage(named: "ic_lock_outline_white_2x")
         
+        return Utilites().inputContainerView(image: image, textField: passwordTextField)
+    }()
+    
+    private let passwordTextField: UITextField = {
         let textField = UITextField()
         let placeholder = NSAttributedString(string: "Password",
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         textField.attributedPlaceholder = placeholder
         textField.isSecureTextEntry = true
         textField.textColor = .white
-        return Utilites().inputContainerView(image: image, textField: textField)
+        return textField
     }()
     
     private let loginButton: UIButton = {
@@ -76,8 +84,23 @@ class LoginViewController: UIViewController {
     // MARK: - Did
     
     @objc private func didTapLogIn() {
-        print("Log in")
-    }
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
+        AuthService.shared.logUserIn(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                print("DEBUG: Error in \(error.localizedDescription)")
+                return
+            }
+            
+            guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+            guard let tab = window.rootViewController as? MainTabController else { return }
+            
+            tab.authenticateUserAndConfigureUI()
+            
+            self.dismiss(animated: true, completion: nil)
+        }
+    } 
     
     @objc private func didTapRegisterButton() {
         let vc = RegistrationViewController()

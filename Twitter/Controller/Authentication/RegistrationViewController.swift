@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import Firebase
 
 class RegistrationViewController: UIViewController {
 
     // MARK: - Properties
     
     private let imagePicker = UIImagePickerController()
+    private var profileImage: UIImage?
     
     private let photoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -25,46 +27,62 @@ class RegistrationViewController: UIViewController {
     private lazy var emailContainerView: UIView = {
         let image = UIImage(named: "ic_mail_outline_white_2x-1")
         
+        return Utilites().inputContainerView(image: image, textField: emailTextField)
+    }()
+    
+    private let emailTextField: UITextField = {
         let textField = UITextField()
         let placeholder = NSAttributedString(string: "Email",
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         textField.attributedPlaceholder = placeholder
         textField.textColor = .white
-        return Utilites().inputContainerView(image: image, textField: textField)
+        return textField
     }()
     
     private lazy var passwordContainerView: UIView = {
         let image = UIImage(named: "ic_lock_outline_white_2x")
         
+        return Utilites().inputContainerView(image: image, textField: passwordTextField)
+    }()
+    
+    private let passwordTextField: UITextField = {
         let textField = UITextField()
         let placeholder = NSAttributedString(string: "Password",
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         textField.attributedPlaceholder = placeholder
         textField.isSecureTextEntry = true
         textField.textColor = .white
-        return Utilites().inputContainerView(image: image, textField: textField)
+        return textField
     }()
     
     private lazy var fullNameContainerView: UIView = {
         let image = UIImage(named: "ic_person_outline_white_2x")
         
+        return Utilites().inputContainerView(image: image, textField: fullNameTextField)
+    }()
+    
+    private let fullNameTextField: UITextField = {
         let textField = UITextField()
         let placeholder = NSAttributedString(string: "Full Name",
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         textField.attributedPlaceholder = placeholder
         textField.textColor = .white
-        return Utilites().inputContainerView(image: image, textField: textField)
+        return textField
     }()
     
     private lazy var userNameContainerView: UIView = {
         let image = UIImage(named: "ic_person_outline_white_2x")
         
+        return Utilites().inputContainerView(image: image, textField: userNameTextField)
+    }()
+    
+    private let userNameTextField: UITextField = {
         let textField = UITextField()
         let placeholder = NSAttributedString(string: "Username",
                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         textField.attributedPlaceholder = placeholder
         textField.textColor = .white
-        return Utilites().inputContainerView(image: image, textField: textField)
+        return textField
     }()
     
     private let signUpButton: UIButton = {
@@ -106,7 +124,17 @@ class RegistrationViewController: UIViewController {
     // MARK: - Did
     
     @objc private func didTapSignUp() {
+        guard let profileImage = profileImage  else { return }
+        guard let email = emailTextField.text else { return }
+        guard let passwod = passwordTextField.text else { return }
+        guard let fullname = fullNameTextField.text else { return }
+        guard let username = userNameTextField.text else { return }
         
+        let credentials = AuthCredentials(email: email, password: passwod, fullname: fullname,
+                                         username: username, profileImage: profileImage)
+        AuthService.shared.registerUser(credentials: credentials) { (error, ref) in
+            print("DEBUG: Successful")
+        }
     }
     
     @objc private func didTapHaveAccountButton() {
@@ -152,6 +180,7 @@ class RegistrationViewController: UIViewController {
 extension RegistrationViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let photo = info[.editedImage] as? UIImage else { return }
+        profileImage = photo
         
         photoButton.imageView?.contentMode = .scaleAspectFill
         photoButton.layer.borderWidth = 2
