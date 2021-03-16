@@ -28,6 +28,8 @@
 		20BDAE6325FA6AB100DB1F11 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 20BDAE6225FA6AB100DB1F11 /* GoogleService-Info.plist */; };
 		20D0DA9025FB576700933E3B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D0DA8F25FB576700933E3B /* Constants.swift */; };
 		20D0DA9325FB77DB00933E3B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D0DA9225FB77DB00933E3B /* AuthService.swift */; };
+		20DF957B2600D3EC006F1ABF /* Tweer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DF957A2600D3EC006F1ABF /* Tweer.swift */; };
+		20DF957E2600E47B006F1ABF /* TweetCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DF957D2600E47B006F1ABF /* TweetCollectionViewCell.swift */; };
 		20EDEF2B25F94F9D00B4FE40 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EDEF2925F94F9D00B4FE40 /* LoginController.swift */; };
 		20EDEF2C25F94F9D00B4FE40 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EDEF2A25F94F9D00B4FE40 /* RegistrationController.swift */; };
 		20EDEF2F25F94FAC00B4FE40 /* Utilites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EDEF2E25F94FAC00B4FE40 /* Utilites.swift */; };
@@ -57,6 +59,8 @@
 		20BDAE6225FA6AB100DB1F11 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		20D0DA8F25FB576700933E3B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		20D0DA9225FB77DB00933E3B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		20DF957A2600D3EC006F1ABF /* Tweer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tweer.swift; sourceTree = "<group>"; };
+		20DF957D2600E47B006F1ABF /* TweetCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCollectionViewCell.swift; sourceTree = "<group>"; };
 		20EDEF2925F94F9D00B4FE40 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		20EDEF2A25F94F9D00B4FE40 /* RegistrationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
 		20EDEF2E25F94FAC00B4FE40 /* Utilites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilites.swift; sourceTree = "<group>"; };
@@ -160,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				2012205F25FFC0AA00EE1D6E /* CaptionTextView.swift */,
+				20DF957D2600E47B006F1ABF /* TweetCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -168,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				2043B1A425FF380E00D0D43E /* User.swift */,
+				20DF957A2600D3EC006F1ABF /* Tweer.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -322,6 +328,8 @@
 				2043B1A525FF380E00D0D43E /* User.swift in Sources */,
 				2012206025FFC0AA00EE1D6E /* CaptionTextView.swift in Sources */,
 				20EDEF2F25F94FAC00B4FE40 /* Utilites.swift in Sources */,
+				20DF957E2600E47B006F1ABF /* TweetCollectionViewCell.swift in Sources */,
+				20DF957B2600D3EC006F1ABF /* Tweer.swift in Sources */,
 				203B54F325F8B8B100DA2552 /* ConversationsController.swift in Sources */,
 				203B54EA25F8B87600DA2552 /* FeedController.swift in Sources */,
 				20D0DA9025FB576700933E3B /* Constants.swift in Sources */,

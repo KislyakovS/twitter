@@ -8,13 +8,19 @@
 import UIKit
 import SDWebImage
 
-class FeedController: UIViewController {
+class FeedController: UICollectionViewController {
 
     // MARK: - Properties
     
     var user: User? {
         didSet {
             configureLeftBarButton()
+        }
+    }
+    
+    private var tweets = [Tweet]() {
+        didSet {
+            collectionView.reloadData()
         }
     }
     
@@ -40,12 +46,24 @@ class FeedController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        fetchTweets()
+    }
+    
+    // MARK: - API
+    
+    private func fetchTweets() {
+        TweetService.shared.fetchTweets { tweets in
+            self.tweets = tweets
+        }
     }
     
     // MARK: - Helpers
     
     private func configureUI() {
         view.backgroundColor = .white
+        
+        collectionView.register(TweetCollectionViewCell.self, forCellWithReuseIdentifier: TweetCollectionViewCell.identifier)
+        collectionView.backgroundColor = .white
         
         navigationItem.titleView = logoImage
     }
@@ -58,3 +76,24 @@ class FeedController: UIViewController {
     }
 }
 
+// MARK - UICollectionViewDelegate
+
+extension FeedController {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return tweets.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TweetCollectionViewCell.identifier, for: indexPath) as! TweetCollectionViewCell
+        
+        return cell
+    }
+}
+
+// MARK - UICollectionViewDelegateFlowLayout
+
+extension FeedController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 120)
+    }
+}
