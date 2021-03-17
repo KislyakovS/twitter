@@ -14,6 +14,12 @@ class TweetCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "tweetCell"
     
+    var tweet: Tweet? {
+        didSet {
+            configure()
+        }
+    }
+    
     private let profileImage: UIImageView = {
        let image = UIImageView()
         image.contentMode = .scaleAspectFill
@@ -89,27 +95,26 @@ class TweetCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Helpers
+    
     private func configureUI() {
         addSubview(profileImage)
         profileImage.anchor(top: safeAreaLayoutGuide.topAnchor,
                             left: safeAreaLayoutGuide.leftAnchor,
-                            paddingTop: 16,
-                            paddingLeft: 16)
+                            paddingTop: 8,
+                            paddingLeft: 8)
         
         let stack = UIStackView(arrangedSubviews: [infoLabel, captionLabel])
         stack.axis = .vertical
-        stack.spacing = 4
-        
-        infoLabel.text = "Eddie Brock @venom"
-        captionLabel.text = "Hello my frends!"
+        stack.spacing = 0
         
         addSubview(stack)
         stack.anchor(top: safeAreaLayoutGuide.topAnchor,
                      left: profileImage.safeAreaLayoutGuide.rightAnchor,
                      right: safeAreaLayoutGuide.rightAnchor,
-                     paddingTop: 16,
+                     paddingTop: 8,
                      paddingLeft: 8,
-                     paddingRight: 16)
+                     paddingRight: 8)
         
         let stackButtons = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
         stackButtons.axis = .horizontal
@@ -123,5 +128,14 @@ class TweetCollectionViewCell: UICollectionViewCell {
         underlineView.anchor(left: safeAreaLayoutGuide.leftAnchor,
                              bottom: safeAreaLayoutGuide.bottomAnchor,
                              right: safeAreaLayoutGuide.rightAnchor, paddingBottom: 0, height: 1)
+    }
+    
+    private func configure() {
+        guard let tweet = tweet else { return }
+        let viewModel = TweetViewModel(tweet: tweet)
+        
+        profileImage.sd_setImage(with: viewModel.profileImageUrl, completed: nil)
+        infoLabel.attributedText = viewModel.userInfoText
+        captionLabel.text = tweet.caption
     }
 }
