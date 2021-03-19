@@ -49,6 +49,12 @@ class FeedController: UICollectionViewController {
         fetchTweets()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.isHidden = false
+    }
+    
     // MARK: - API
     
     private func fetchTweets() {
@@ -60,8 +66,6 @@ class FeedController: UICollectionViewController {
     // MARK: - Helpers
     
     private func configureUI() {
-        view.backgroundColor = .white
-        
         collectionView.register(TweetCollectionViewCell.self, forCellWithReuseIdentifier: TweetCollectionViewCell.identifier)
         collectionView.backgroundColor = .white
         navigationItem.titleView = logoImage
@@ -84,6 +88,7 @@ extension FeedController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TweetCollectionViewCell.identifier, for: indexPath) as! TweetCollectionViewCell
+        cell.delegate = self
         cell.tweet = tweets[indexPath.row]
         return cell
     }
@@ -98,5 +103,14 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+}
+
+// MARK: - TweetCollectionViewCellDelegate
+
+extension FeedController: TweetCollectionViewCellDelegate {
+    func didTapProfile(_ user: User) {
+        let vc = ProfileController(user: user)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

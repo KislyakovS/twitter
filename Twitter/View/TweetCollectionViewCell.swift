@@ -8,11 +8,17 @@
 import UIKit
 import SDWebImage
 
+protocol TweetCollectionViewCellDelegate: class {
+    func didTapProfile(_ user: User)
+}
+
 class TweetCollectionViewCell: UICollectionViewCell {
         
     // MARK: - Properties
     
     static let identifier = "tweetCell"
+    
+    weak var delegate: TweetCollectionViewCellDelegate?
     
     var tweet: Tweet? {
         didSet {
@@ -20,13 +26,18 @@ class TweetCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private let profileImage: UIImageView = {
+    private lazy var profileImage: UIImageView = {
        let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.setDimensions(width: 48, height: 48)
         image.layer.cornerRadius = 48/2
         image.backgroundColor = .twitterBlue
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapProfile))
+        image.addGestureRecognizer(tap)
+        image.isUserInteractionEnabled = true
+        
         return image
     }()
     
@@ -95,6 +106,14 @@ class TweetCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Did
+    
+    @objc private func didTapProfile() {
+        guard let user = tweet?.user else { return }
+        
+        delegate?.didTapProfile(user)
+    }
+    
     // MARK: - Helpers
     
     private func configureUI() {
@@ -128,6 +147,8 @@ class TweetCollectionViewCell: UICollectionViewCell {
         underlineView.anchor(left: safeAreaLayoutGuide.leftAnchor,
                              bottom: safeAreaLayoutGuide.bottomAnchor,
                              right: safeAreaLayoutGuide.rightAnchor, paddingBottom: 0, height: 1)
+        
+        
     }
     
     private func configure() {
