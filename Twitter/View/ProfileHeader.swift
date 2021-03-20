@@ -9,6 +9,7 @@ import UIKit
 
 protocol ProfileHeaderDelegate: class {
     func didTapBackButton()
+    func didTapEditProfileFollow(_ header: ProfileHeader)
 }
 
 class ProfileHeader: UICollectionReusableView {
@@ -61,13 +62,14 @@ class ProfileHeader: UICollectionReusableView {
         return image
     }()
     
-    private lazy var actionButton: UIButton = {
+    lazy var actionButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.borderColor = UIColor.twitterBlue.cgColor
         button.layer.borderWidth = 1.25
         button.setTitleColor(.twitterBlue, for: .normal)
         button.setTitle("Loading", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(didTapEditProfile), for: .touchUpInside)
         return button
     }()
     
@@ -136,6 +138,10 @@ class ProfileHeader: UICollectionReusableView {
     
     @objc private func didTapBackButton() {
         delegate?.didTapBackButton()
+    }
+    
+    @objc private func didTapEditProfile() {
+        delegate?.didTapEditProfileFollow(self)
     }
     
     @objc private func didTapFollowing() {
