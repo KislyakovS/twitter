@@ -66,7 +66,7 @@ class FeedController: UICollectionViewController {
     // MARK: - Helpers
     
     private func configureUI() {
-        collectionView.register(TweetCollectionViewCell.self, forCellWithReuseIdentifier: TweetCollectionViewCell.identifier)
+        collectionView.register(TweetCell.self, forCellWithReuseIdentifier: TweetCell.identifier)
         collectionView.backgroundColor = .white
         navigationItem.titleView = logoImage
     }
@@ -87,7 +87,7 @@ extension FeedController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TweetCollectionViewCell.identifier, for: indexPath) as! TweetCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TweetCell.identifier, for: indexPath) as! TweetCell
         cell.delegate = self
         cell.tweet = tweets[indexPath.row]
         return cell
@@ -103,7 +103,10 @@ extension FeedController {
 
 extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 120)
+        let viewModel = TweetViewModel(tweet: tweets[indexPath.row])
+        let height = viewModel.size(forWidth: view.frame.width).height
+        
+        return CGSize(width: view.frame.width, height: height + 75)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -117,5 +120,13 @@ extension FeedController: TweetCollectionViewCellDelegate {
     func didTapProfile(_ user: User) {
         let vc = ProfileController(user: user)
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func didTapComment(_ tweet: Tweet) {
+        guard let user = user else { return }
+        
+        let vc = UINavigationController(rootViewController: UploadTweetController(user: user, config: .reply(tweet)))
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
     }
 }

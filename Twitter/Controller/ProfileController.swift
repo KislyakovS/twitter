@@ -70,7 +70,7 @@ class ProfileController: UICollectionViewController {
     
     private func configureUI() {
         collectionView.contentInsetAdjustmentBehavior = .never
-        collectionView.register(TweetCollectionViewCell.self, forCellWithReuseIdentifier: TweetCollectionViewCell.identifier)
+        collectionView.register(TweetCell.self, forCellWithReuseIdentifier: TweetCell.identifier)
         collectionView.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ProfileHeader.identifier)
         collectionView.backgroundColor = .white
     }
@@ -84,7 +84,7 @@ extension ProfileController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TweetCollectionViewCell.identifier, for: indexPath) as! TweetCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TweetCell.identifier, for: indexPath) as! TweetCell
         cell.tweet = tweets[indexPath.row]
         return cell
     }

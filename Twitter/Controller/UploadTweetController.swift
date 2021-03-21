@@ -12,7 +12,9 @@ class UploadTweetController: UIViewController {
     
     // MARK: - Properties
     
-    private let user: User?
+    private let user: User
+    private let config: UploadTweetConfiguration
+    private lazy var viewModel = UploadTweetViewModel(config: config)
     
     private lazy var buttonTweet: UIButton = {
         let button = UIButton(type: .system)
@@ -39,12 +41,22 @@ class UploadTweetController: UIViewController {
         return image
     }()
     
+    private lazy var replyLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .lightGray
+        label.text = "Replying to @spiderman"
+        label.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        return label
+    }()
+    
     private let captionTextView = CaptionTextView()
 
     // MARK: - Lifecycle
     
-    init(user: User?) {
+    init(user: User, config: UploadTweetConfiguration) {
         self.user = user
+        self.config = config
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,6 +68,7 @@ class UploadTweetController: UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        configure()
     }
     
     // MARK: - API
@@ -68,8 +81,7 @@ class UploadTweetController: UIViewController {
     
     @objc private func didTapUploadTweet() {
         guard let caption = captionTextView.text else { return }
-        TweetService.shared.uploadTweet(caprion: caption) { (error, ref) in
-            print("DEBUG: Upload new tweet")
+        TweetService.shared.uploadTweet(caprion: caption, type: config) { (error, ref) in
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -81,17 +93,30 @@ class UploadTweetController: UIViewController {
         
         configureNavigationBar()
         
-        let stack = UIStackView(arrangedSubviews: [profileImage, captionTextView])
-        stack.axis = .horizontal
+        let imageCaptionStack = UIStackView(arrangedSubviews: [profileImage, captionTextView])
+        imageCaptionStack.axis = .horizontal
+        imageCaptionStack.spacing = 12
+        imageCaptionStack.alignment = .leading
+        
+        let stack = UIStackView(arrangedSubviews: [replyLabel, imageCaptionStack])
+        stack.axis = .vertical
         stack.spacing = 12
-        stack.alignment = .leading
         
         view.addSubview(stack)
         stack.anchor(top: view.safeAreaLayoutGuide.topAnchor,
                      left: view.safeAreaLayoutGuide.leftAnchor,
                      right: view.safeAreaLayoutGuide.rightAnchor,
                      paddingTop: 16, paddingLeft: 16, paddingRight: 16)
-        profileImage.sd_setImage(with: user?.profileImageUrl, completed: nil)
+        profileImage.sd_setImage(with: user.profileImageUrl, completed: nil)
+    }
+    
+    private func configure() {
+        buttonTweet.setTitle(viewModel.actionButtonTitle, for: .normal)
+        captionTextView.placeholderLabel.text = viewModel.placeholderText
+        
+        replyLabel.isHidden = !viewModel.shouldShowReplyLabel
+        guard let replyText = viewModel.replyText else { return }
+        replyLabel.text = replyText
     }
     
     private func configureNavigationBar() {

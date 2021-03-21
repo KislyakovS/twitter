@@ -10,9 +10,10 @@ import SDWebImage
 
 protocol TweetCollectionViewCellDelegate: class {
     func didTapProfile(_ user: User)
+    func didTapComment(_ tweet: Tweet)
 }
 
-class TweetCollectionViewCell: UICollectionViewCell {
+class TweetCell: UICollectionViewCell {
         
     // MARK: - Properties
     
@@ -65,6 +66,7 @@ class TweetCollectionViewCell: UICollectionViewCell {
         button.setImage(UIImage(named: "comment"), for: .normal)
         button.tintColor = .darkGray
         button.setDimensions(width: 20, height: 20)
+        button.addTarget(self, action: #selector(didTapComment), for: .touchUpInside)
         return button
     }()
     
@@ -114,6 +116,12 @@ class TweetCollectionViewCell: UICollectionViewCell {
         delegate?.didTapProfile(user)
     }
     
+    @objc private func didTapComment() {
+        guard let tweet = tweet else { return }
+        
+        delegate?.didTapComment(tweet)
+    }
+    
     // MARK: - Helpers
     
     private func configureUI() {
@@ -141,7 +149,7 @@ class TweetCollectionViewCell: UICollectionViewCell {
         
         addSubview(stackButtons)
         stackButtons.centerX(inView: self)
-        stackButtons.anchor(bottom: safeAreaLayoutGuide.bottomAnchor, paddingBottom: 8)
+        stackButtons.anchor(bottom: bottomAnchor, paddingBottom: 8)
         
         addSubview(underlineView)
         underlineView.anchor(left: safeAreaLayoutGuide.leftAnchor,
