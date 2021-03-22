@@ -67,9 +67,10 @@ struct TweetViewModel {
         return attributeTitle
     }
     
-    func size(forWidth width: CGFloat) -> CGSize {
+    func size(forWidth width: CGFloat, fontSize: CGFloat) -> CGSize {
         let label = UILabel()
         label.text = tweet.caption
+        label.font = UIFont.systemFont(ofSize: fontSize)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol TweetHeaderDelegate: class {
+    func showActionSheet()
+}
+
 class TweetHeader: UICollectionReusableView {
     
     // MARK: - Properties
@@ -16,6 +20,8 @@ class TweetHeader: UICollectionReusableView {
             configure()
         }
     }
+    
+    weak var delegate: TweetHeaderDelegate?
     
     static let identifier = "TweetHeader"
     
@@ -66,6 +72,7 @@ class TweetHeader: UICollectionReusableView {
         let button = UIButton(type: .system)
         button.tintColor = .lightGray
         button.setImage(UIImage(named: "down_arrow_24pt"), for: .normal)
+        button.addTarget(self, action: #selector(didTapActionSheet), for: .touchUpInside)
         return button
     }()
     
@@ -153,6 +160,12 @@ class TweetHeader: UICollectionReusableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Did
+    
+    @objc private func didTapActionSheet() {
+        delegate?.showActionSheet()
     }
     
     // MARK: - Helpers
