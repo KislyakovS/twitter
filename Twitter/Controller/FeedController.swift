@@ -60,6 +60,14 @@ class FeedController: UICollectionViewController {
     private func fetchTweets() {
         TweetService.shared.fetchTweets { tweets in
             self.tweets = tweets
+            
+            for (index, tweet) in tweets.enumerated() {
+                TweetService.shared.checkIfUserLikedTweet(tweet) { didLike in
+                    guard didLike == true else { return }
+                    
+                    self.tweets[index].didLike = true
+                }
+            }
         }
     }
     
@@ -79,7 +87,7 @@ class FeedController: UICollectionViewController {
     }
 }
 
-// MARK - UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
 
 extension FeedController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -117,6 +125,16 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
 // MARK: - TweetCollectionViewCellDelegate
 
 extension FeedController: TweetCollectionViewCellDelegate {
+    func didTapLike(_ cell: TweetCell) {
+        guard let tweet = cell.tweet else { return }
+        
+        TweetService.shared.likeTweet(tweet: tweet) { error, ref in
+            cell.tweet?.didLike.toggle()
+            let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+            cell.tweet?.likes = likes
+        }
+    }
+    
     func didTapProfile(_ user: User) {
         let vc = ProfileController(user: user)
         navigationController?.pushViewController(vc, animated: true)
