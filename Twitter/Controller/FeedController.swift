@@ -55,9 +55,16 @@ class FeedController: UICollectionViewController {
         navigationController?.navigationBar.isHidden = false
     }
     
+    // MARK: - Did
+    
+    @objc private func didRefresh() {
+        fetchTweets()
+    }
+    
     // MARK: - API
     
     private func fetchTweets() {
+        collectionView.refreshControl?.beginRefreshing()
         TweetService.shared.fetchTweets { tweets in
             self.tweets = tweets
             
@@ -68,6 +75,17 @@ class FeedController: UICollectionViewController {
                     self.tweets[index].didLike = true
                 }
             }
+            
+            self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
+            
+            self.collectionView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    private func fetchUser(withUsername username: String) {
+        UserService.shared.fetchUser(withUsername: username) { user in
+            let controller = ProfileController(user: user)
+            self.navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -77,6 +95,10 @@ class FeedController: UICollectionViewController {
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: TweetCell.identifier)
         collectionView.backgroundColor = .white
         navigationItem.titleView = logoImage
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(didRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
     }
     
     private func configureLeftBarButton() {
@@ -146,5 +168,9 @@ extension FeedController: TweetCollectionViewCellDelegate {
         let vc = UINavigationController(rootViewController: UploadTweetController(user: user, config: .reply(tweet)))
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
+    }
+    
+    func didFetchUser(withUsername username: String) {
+        fetchUser(withUsername: username)
     }
 }

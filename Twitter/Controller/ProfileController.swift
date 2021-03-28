@@ -119,6 +119,11 @@ extension ProfileController: ProfileHeaderDelegate {
     func didTapEditProfileFollow(_ header: ProfileHeader) {
         
         if user.isCurrentUser {
+            let controller = EditProfileController(user: user)
+            controller.delegate = self
+            let nav = UINavigationController(rootViewController: controller)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true, completion: nil)
             return
         }
         
@@ -137,5 +142,15 @@ extension ProfileController: ProfileHeaderDelegate {
     
     func didTapBackButton() {
         navigationController?.popToRootViewController(animated: true)
+    }
+}
+
+// MARK: - EditProfileControllerDelegate
+
+extension ProfileController: EditProfileControllerDelegate {
+    func controller(_ controller: EditProfileController, wantsToUpdate user: User) {
+        self.user = user
+        self.collectionView.reloadData()
+        controller.dismiss(animated: true, completion: nil)
     }
 }

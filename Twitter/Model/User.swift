@@ -9,9 +9,10 @@ import Foundation
 import Firebase
 
 struct User {
-    let fullname: String
-    let username: String
+    var fullname: String
+    var username: String
     let email: String
+    var bio: String
     var profileImageUrl: URL?
     let uid: String
     var isFollowed = false
@@ -25,6 +26,7 @@ struct User {
         self.fullname = dictinary["fullname"] as? String ?? ""
         self.username = dictinary["username"] as? String ?? ""
         self.email = dictinary["email"] as? String ?? ""
+        self.bio = dictinary["bio"] as? String ?? ""
         if let profileImageUrlString = dictinary["profileImageUrl"] as? String {
             self.profileImageUrl = URL(string: profileImageUrlString)
         }

@@ -11,12 +11,19 @@ struct UserService {
     static let shared = UserService()
     
     func fetchUser(uid: String, completion: @escaping (User) -> Void) {
-        REF_USERS.child(uid).observeSingleEvent(of: .value) { snaphot in
-            guard let dictinary = snaphot.value as? [String: Any] else { return }
+        REF_USERS.child(uid).observeSingleEvent(of: .value) { snapshot in
+            guard let dictinary = snapshot.value as? [String: Any] else { return }
                 
             let user = User(uid: uid, dictinary: dictinary)
                 
             completion(user)
+        }
+    }
+    
+    func fetchUser(withUsername username: String, completion: @escaping (User) -> Void) {
+        REF_USER_USERNAME.child(username).observeSingleEvent(of: .value) { snapshot in
+            guard let uid = snapshot.value as? String else { return }
+            self.fetchUser(uid: uid, completion: completion)
         }
     }
     
@@ -70,5 +77,32 @@ struct UserService {
                 completion(stats)
             }
         }
+    }
+    
+    func updateProfileImage(image: UIImage, completion: @escaping (URL) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.3) else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let filename = NSUUID().uuidString
+        let ref = STORAGE_PROFILE_IMAGES.child(filename)
+        
+        ref.putData(imageData, metadata: nil) { (meta, error) in
+            ref.downloadURL { (url, error) in
+                guard let profileImageUrl = url?.absoluteString else { return }
+                let values = ["profileImageUrl": profileImageUrl]
+                
+                REF_USERS.child(uid).updateChildValues(values) { (error, ref) in
+                    completion(URL(string: profileImageUrl)!)
+                }
+            }
+        }
+    }
+    
+    func saveUserData(user: User, completion: @escaping (Error?, DatabaseReference) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let values = ["fullname": user.fullname, "username": user.username, "bio": user.bio]
+        
+        REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: completion)
     }
 }

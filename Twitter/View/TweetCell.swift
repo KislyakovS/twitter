@@ -7,11 +7,13 @@
 
 import UIKit
 import SDWebImage
+import ActiveLabel
 
 protocol TweetCollectionViewCellDelegate: class {
     func didTapProfile(_ user: User)
     func didTapComment(_ tweet: Tweet)
     func didTapLike(_ cell: TweetCell)
+    func didFetchUser(withUsername username: String)
 }
 
 class TweetCell: UICollectionViewCell {
@@ -43,16 +45,19 @@ class TweetCell: UICollectionViewCell {
         return image
     }()
     
-    private let captionLabel: UILabel = {
-        let label = UILabel()
+    private let captionLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 14)
+        label.mentionColor = .twitterBlue
+        label.hashtagColor = .twitterBlue
         label.numberOfLines = 0
         return label
     }()
     
-    private let infoLabel: UILabel = {
-        let label = UILabel()
+    private let infoLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 14)
+        label.mentionColor = .lightGray
         return label
     }()
     
@@ -104,6 +109,7 @@ class TweetCell: UICollectionViewCell {
         backgroundColor = .white
         
         configureUI()
+        configureMention()
     }
         
     required init?(coder: NSCoder) {
@@ -174,5 +180,11 @@ class TweetCell: UICollectionViewCell {
         captionLabel.text = tweet.caption
         likeButton.tintColor = viewModel.likeButtonTintColor
         likeButton.setImage(viewModel.likeButtonImage, for: .normal)
+    }
+    
+    private func configureMention() {
+        captionLabel.handleMentionTap { mention in
+            self.delegate?.didFetchUser(withUsername: mention)
+        }
     }
 }

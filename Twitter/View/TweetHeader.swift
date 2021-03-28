@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ActiveLabel
 
 protocol TweetHeaderDelegate: class {
     func showActionSheet()
@@ -32,11 +33,6 @@ class TweetHeader: UICollectionReusableView {
         image.setDimensions(width: 48, height: 48)
         image.layer.cornerRadius = 48/2
         image.backgroundColor = .twitterBlue
-        
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapProfile))
-//        image.addGestureRecognizer(tap)
-//        image.isUserInteractionEnabled = true
-        
         return image
     }()
     
@@ -46,17 +42,19 @@ class TweetHeader: UICollectionReusableView {
         return label
     }()
     
-    private let usernameLabel: UILabel = {
-        let label = UILabel()
+    private let usernameLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .lightGray
+        label.mentionColor = .lightGray
         return label
     }()
     
-    private let captionLabel: UILabel = {
-        let label = UILabel()
+    private let captionLabel: ActiveLabel = {
+        let label = ActiveLabel()
         label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
+        label.mentionColor = .twitterBlue
+        label.hashtagColor = .twitterBlue
         return label
     }()
     
